@@ -162,6 +162,21 @@ if (isGecko) {
   });
 }
 
+// Both come from the manifest so each build reports its own version and neither
+// value has to be duplicated in code.
+const manifest = api.runtime.getManifest();
+el("version").textContent = `v${manifest.version}`;
+
+const repoLink = el("repo");
+repoLink.href = manifest.homepage_url;
+// A plain anchor in a popup won't reliably open a tab, so route through the
+// tabs API and dismiss the popup afterwards.
+repoLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  api.tabs.create({ url: manifest.homepage_url });
+  window.close();
+});
+
 async function init() {
   nameInput.value = timestamp();
 

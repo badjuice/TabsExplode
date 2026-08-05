@@ -52,6 +52,8 @@ const manifests = await Promise.all(
 );
 check("same version", manifests[0].version, manifests[1].version);
 check("same name", manifests[0].name, manifests[1].name);
+check("same homepage", manifests[0].homepage_url, manifests[1].homepage_url);
+check("homepage is set", typeof manifests[0].homepage_url, "string");
 check("same permissions", manifests[0].permissions, manifests[1].permissions);
 check("chromium uses a service worker", typeof manifests[0].background.service_worker, "string");
 check("firefox uses background scripts", manifests[1].background.scripts, ["background.js"]);
