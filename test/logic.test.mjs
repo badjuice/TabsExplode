@@ -64,7 +64,17 @@ const WIN_A = {
     { id: 14, index: 4, url: "https://loose.example", title: "Loose", groupId: -1 },
     { id: 15, index: 5, url: "https://c.example", title: "C", groupId: 8 },
     { id: 16, index: 6, url: "", title: "Broken", groupId: 8 },
-    { id: 17, index: 7, url: "https://d.example", title: "D", groupId: 9 },
+    // Stands in for a Zen Space that isn't the active one: hidden, and in its
+    // own container. It must still be collected — missing these was the bug.
+    {
+      id: 17,
+      index: 7,
+      url: "https://d.example",
+      title: "D",
+      groupId: 9,
+      hidden: true,
+      cookieStoreId: "firefox-container-2",
+    },
   ],
 };
 const WIN_B = {
@@ -92,7 +102,15 @@ const CHROME = {
       return [WIN_A, WIN_B].find((w) => w.id === id);
     },
     async getAll() {
-      return [WIN_A, WIN_B];
+      return [WIN_A, WIN_B].map(({ id }) => ({ id }));
+    },
+  },
+  // collect() reads tabs through tabs.query, not windows.populate, so that
+  // Space-hidden tabs are included. The fake mirrors that.
+  tabs: {
+    async query({ windowId }) {
+      const win = [WIN_A, WIN_B].find((w) => w.id === windowId);
+      return win ? [...win.tabs] : [];
     },
   },
   tabGroups: {
@@ -162,7 +180,10 @@ function check(name, actual, expected) {
       "    Loose",
     ].join("\n"),
   );
-  check("single window counts", plan.counts, { windows: 1, tabs: 7, groups: 3, skipped: 1 });
+  check("single window counts", plan.counts, {
+    windows: 1, tabs: 7, groups: 3, skipped: 1, hidden: 1, stores: 1,
+  });
+  check("hidden Space tab was collected", tree.includes("D"), true);
   check("written count", result.written, 7);
   check("tabIds exclude skipped", plan.windows[0].tabIds, [10, 11, 12, 13, 14, 15, 17]);
 }
@@ -214,7 +235,9 @@ function check(name, actual, expected) {
       "      Solo",
     ].join("\n"),
   );
-  check("all windows counts", plan.counts, { windows: 2, tabs: 8, groups: 3, skipped: 1 });
+  check("all windows counts", plan.counts, {
+    windows: 2, tabs: 8, groups: 3, skipped: 1, hidden: 1, stores: 1,
+  });
 }
 
 // 3. fork without chrome.tabGroups: grouping survives, names degrade.

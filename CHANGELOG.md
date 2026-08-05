@@ -5,6 +5,20 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] — 2026-08-05
+
+### Fixed
+
+- Tabs in inactive Zen Spaces were silently omitted from saves. `collect()` read
+  tabs via `windows.get({ populate: true })`, which excludes hidden tabs — and
+  Zen hides every tab belonging to a Space that isn't active. It now reads
+  through `tabs.query()`, which returns them.
+
+### Added
+
+- The summary line reports spaces when they are detectable, and a note when a
+  save includes tabs from other spaces.
+
 ## [1.4.0] — 2026-08-05
 
 ### Added
@@ -83,6 +97,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   half-written folder behind.
 - Untitled groups are numbered; duplicate group names get a ` (2)` suffix.
 
+[1.5.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.5.0
 [1.4.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.4.0
 [1.3.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.3.0
 [1.2.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.2.0
