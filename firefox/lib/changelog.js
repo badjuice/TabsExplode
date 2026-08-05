@@ -1,6 +1,21 @@
 // Generated from CHANGELOG.md by tools/changelog.mjs. Do not edit by hand.
 export const RELEASES = [
   {
+    "version": "1.9.0",
+    "date": "2026-08-05",
+    "sections": [
+      {
+        "kind": "Changed",
+        "items": [
+          "The About toggle moved from the footer to the brand row, top right. The views differ in height, so a footer-mounted button shifted out from under the cursor on every click; the brand row is the one strip whose position never moves.",
+          "Cancel, Close and the toggle carry a gradient outline at rest and fill with the gradient on hover. A CSS border cannot take a gradient, so these use two background layers: the page colour clipped to the padding box, the gradient clipped to the border box, with a transparent border between them.",
+          "Dropdowns and text fields take the same gradient border on hover and focus, replacing the flat accent outline.",
+          "Dropdowns draw their own chevron. Setting any background-image on a select removes the native arrow, so it had to be supplied."
+        ]
+      }
+    ]
+  },
+  {
     "version": "1.8.0",
     "date": "2026-08-05",
     "sections": [

@@ -12,6 +12,12 @@
   --accent-fg: #ffffff;
   --ghost-hover: #f1f2f5;
   --ok: #15803d;
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238b8f98' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Resolved where it is used, so it picks up the dark-mode brand values. */
+:root {
+  --grad: linear-gradient(115deg, var(--brand-from), var(--brand-to));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -141,16 +147,47 @@ input {
   padding: 7px 9px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--field);
+  background-color: var(--field);
   color: inherit;
   font: inherit;
 }
 
-select:focus-visible,
+/* The native arrow disappears the moment a background-image is set, so it is
+   drawn here and carried through every state. */
+select {
+  appearance: none;
+  padding-right: 26px;
+  background-image: var(--chevron);
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 10px 6px;
+}
+
+/* A border cannot take a gradient, so two layers do the work: the field fill
+   clipped to the padding box, the gradient clipped to the border box, with the
+   border itself transparent so the gradient shows through it. background-color
+   has to go, or it would paint over the border area and hide the gradient. */
+input:hover,
 input:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -1px;
   border-color: transparent;
+  outline: none;
+  background-color: transparent;
+  background-image: linear-gradient(var(--field), var(--field)), var(--grad);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+select:hover,
+select:focus-visible {
+  border-color: transparent;
+  outline: none;
+  background-color: transparent;
+  background-image: var(--chevron), linear-gradient(var(--field), var(--field)), var(--grad);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: right 9px center, 0 0, 0 0;
+  background-size: 10px 6px, auto, auto;
+  background-origin: padding-box, border-box, border-box;
+  background-clip: padding-box, padding-box, border-box;
 }
 
 .destination {
@@ -189,7 +226,8 @@ button {
 }
 
 .primary {
-  background-image: linear-gradient(115deg, var(--brand-from), var(--brand-to));
+  background-color: transparent;
+  background-image: var(--grad);
   color: var(--accent-fg);
 }
 
@@ -197,16 +235,21 @@ button {
   filter: brightness(1.07);
 }
 
+/* Gradient outline at rest, gradient fill on hover. Same two-layer trick as the
+   fields: swapping the inner layer from the page background to the gradient is
+   what turns the outline into a fill. */
 .ghost {
-  border-color: var(--border);
-  background: transparent;
+  border-color: transparent;
   color: inherit;
+  background-color: transparent;
+  background-image: linear-gradient(var(--bg), var(--bg)), var(--grad);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .ghost:hover:not(:disabled) {
-  border-color: var(--accent);
-  background: var(--ghost-hover);
-  color: var(--accent);
+  background-image: var(--grad), var(--grad);
+  color: var(--accent-fg);
 }
 
 button:disabled {
@@ -227,22 +270,32 @@ footer {
   font-size: 11px;
 }
 
-/* A bordered control rather than a bare link, so it reads as something you
-   press and lines up against the version on the opposite edge. */
+/* Anchored to the brand row rather than the footer. The views differ in height,
+   so a footer-mounted toggle moved out from under the cursor on every click;
+   the header is the one strip whose position never changes. */
 .toggle {
-  padding: 4px 11px;
-  border: 1px solid var(--border);
+  margin-left: auto;
+  flex: none;
+  /* Fits both labels, so swapping About for Back cannot resize the button and
+     slide its left edge out from under the cursor. */
+  min-width: 58px;
+  padding: 3px 10px;
+  text-align: center;
+  border: 1px solid transparent;
   border-radius: 6px;
-  background: transparent;
   color: var(--muted);
   font-size: 11px;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.5;
+  background-color: transparent;
+  background-image: linear-gradient(var(--bg), var(--bg)), var(--grad);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .toggle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  background-image: var(--grad), var(--grad);
+  color: var(--accent-fg);
 }
 
 .credits {

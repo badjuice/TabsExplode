@@ -5,6 +5,22 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-08-05
+
+### Changed
+
+- The About toggle moved from the footer to the brand row, top right. The views
+  differ in height, so a footer-mounted button shifted out from under the cursor
+  on every click; the brand row is the one strip whose position never moves.
+- Cancel, Close and the toggle carry a gradient outline at rest and fill with
+  the gradient on hover. A CSS border cannot take a gradient, so these use two
+  background layers: the page colour clipped to the padding box, the gradient
+  clipped to the border box, with a transparent border between them.
+- Dropdowns and text fields take the same gradient border on hover and focus,
+  replacing the flat accent outline.
+- Dropdowns draw their own chevron. Setting any background-image on a select
+  removes the native arrow, so it had to be supplied.
+
 ## [1.8.0] - 2026-08-05
 
 ### Changed
@@ -157,6 +173,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   half-written folder behind.
 - Untitled groups are numbered; duplicate group names get a ` (2)` suffix.
 
+[1.9.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.9.0
 [1.8.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.8.0
 [1.7.1]: https://github.com/badjuice/TabsExplode/releases/tag/v1.7.1
 [1.7.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.7.0
