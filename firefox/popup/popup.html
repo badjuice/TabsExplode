@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <section id="confirm">
+      <h1 id="summary">Reading tabs…</h1>
+      <label for="name">Folder name</label>
+      <input id="name" type="text" autocomplete="off" spellcheck="false" />
+      <p class="destination">Into <span id="destination">…</span></p>
+      <p class="note" id="note" hidden></p>
+      <div class="actions">
+        <button id="cancel" class="ghost" type="button">Cancel</button>
+        <button id="save" class="primary" type="button" disabled>Save</button>
+      </div>
+
+      <h2>Settings</h2>
+      <div class="setting">
+        <label for="scope">Save tabs from</label>
+        <select id="scope">
+          <option value="current">The current window</option>
+          <option value="all">All open windows</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label for="group-placement">Group folders</label>
+        <select id="group-placement">
+          <option value="top">At the top</option>
+          <option value="inline">In tab order</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label for="after-save">After saving</label>
+        <select id="after-save">
+          <option value="keep">Leave tabs open</option>
+          <option value="close">Close saved tabs</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label for="root">Save into</label>
+        <select id="root"></select>
+      </div>
+      <div class="setting">
+        <label for="container">Parent folder</label>
+        <input id="container" type="text" autocomplete="off" spellcheck="false" />
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </section>
+
+    <section id="done" hidden>
+      <h1 id="done-text"></h1>
+      <div class="actions">
+        <button id="dismiss" class="ghost" type="button">Close</button>
+        <button id="open" class="primary" type="button">Open folder</button>
+      </div>
+    </section>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
