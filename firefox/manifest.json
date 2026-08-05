@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TabsExplode",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Bookmark every open tab in one click, keeping tab groups as folders.",
   "homepage_url": "https://github.com/badjuice/TabsExplode",
   "browser_specific_settings": {

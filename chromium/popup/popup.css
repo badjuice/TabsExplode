@@ -209,12 +209,6 @@ footer {
   font-size: 11px;
 }
 
-.footer-links {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 footer a,
 footer .link {
   padding: 0;

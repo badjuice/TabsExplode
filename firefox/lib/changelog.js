@@ -1,6 +1,18 @@
 // Generated from CHANGELOG.md by tools/changelog.mjs. Do not edit by hand.
 export const RELEASES = [
   {
+    "version": "1.7.1",
+    "date": "2026-08-05",
+    "sections": [
+      {
+        "kind": "Changed",
+        "items": [
+          "The footer now carries the version and an About link only. \"See on GitHub\" moved into the About panel, next to the credits."
+        ]
+      }
+    ]
+  },
+  {
     "version": "1.7.0",
     "date": "2026-08-05",
     "sections": [
