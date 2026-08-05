@@ -1,4 +1,4 @@
-import { api } from "./api.js";
+import { api, isGecko } from "./api.js";
 
 export const DEFAULTS = {
   scope: "current", // "current" | "all"
@@ -20,18 +20,29 @@ export async function setSettings(patch) {
   await api.storage.local.set(patch);
 }
 
-// The permanent folders differ between browsers and their titles are localised,
-// so read them off the tree instead of hardcoding ids.
+// Chromium ids the tree root "0", Firefox "root________".
+const TREE_ROOT = isGecko ? "root________" : "0";
+
+// Only the top-level folders are ever needed. getChildren fetches exactly
+// those; bookmarks.getTree() would serialise every bookmark in the profile,
+// which grows with each save and is what made the popup slow to populate.
 export async function getRootFolders() {
+  try {
+    const children = await api.bookmarks.getChildren(TREE_ROOT);
+    if (children.length) return children.filter((child) => !child.url);
+  } catch {
+    // Unrecognised root id on some fork — fall back to the whole-tree read.
+  }
   const [root] = await api.bookmarks.getTree();
   return (root.children ?? []).filter((child) => !child.url);
 }
 
-export async function resolveRootId(settings) {
-  const roots = await getRootFolders();
-  if (settings.rootId && roots.some((folder) => folder.id === settings.rootId)) {
+// `roots` is optional so callers that already have them don't refetch.
+export async function resolveRootId(settings, roots) {
+  const folders = roots ?? (await getRootFolders());
+  if (settings.rootId && folders.some((folder) => folder.id === settings.rootId)) {
     return settings.rootId;
   }
-  const other = roots.find((folder) => OTHER_BOOKMARKS.includes(folder.id));
-  return (other ?? roots[1] ?? roots[0]).id;
+  const other = folders.find((folder) => OTHER_BOOKMARKS.includes(folder.id));
+  return (other ?? folders[1] ?? folders[0]).id;
 }

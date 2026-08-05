@@ -41,8 +41,7 @@ function timestamp() {
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 async function loadSettings() {
-  const settings = await getSettings();
-  const roots = await getRootFolders();
+  const [settings, roots] = await Promise.all([getSettings(), getRootFolders()]);
 
   root.replaceChildren(
     ...roots.map((folder) => {
@@ -57,7 +56,7 @@ async function loadSettings() {
   groupPlacement.value = settings.groupPlacement;
   afterSave.value = settings.afterSave;
   container.value = settings.containerName;
-  root.value = await resolveRootId(settings);
+  root.value = await resolveRootId(settings, roots);
 }
 
 async function refreshPreview() {
@@ -187,8 +186,8 @@ async function init() {
   const [activeTab] = await api.tabs.query({ active: true, currentWindow: true });
   windowId = activeTab.windowId;
 
-  await loadSettings();
-  await refreshPreview();
+  // Independent of each other, so neither waits on the other's round trip.
+  await Promise.all([loadSettings(), refreshPreview()]);
 
   nameInput.focus();
   nameInput.select();

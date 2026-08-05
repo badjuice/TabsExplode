@@ -16,8 +16,11 @@ api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
 async function preview({ windowId }) {
   const settings = await getSettings();
-  const plan = await collect(settings.scope, windowId);
-  const [root] = await api.bookmarks.get(await resolveRootId(settings));
+  const [plan, rootId] = await Promise.all([
+    collect(settings.scope, windowId),
+    resolveRootId(settings),
+  ]);
+  const [root] = await api.bookmarks.get(rootId);
   return {
     ok: true,
     counts: plan.counts,

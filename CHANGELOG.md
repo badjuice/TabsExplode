@@ -5,6 +5,19 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] — 2026-08-05
+
+### Fixed
+
+- Popup settings took a visible moment to populate, and got worse the more the
+  extension was used. `getRootFolders()` called `bookmarks.getTree()`, which
+  serialises every bookmark in the profile, and it ran three times per open —
+  twice in the popup, once in the background preview. It now reads only the
+  root's children via `bookmarks.getChildren()`, `resolveRootId()` accepts
+  already-fetched folders instead of refetching, and the popup loads settings
+  and preview in parallel. On a 2,000-bookmark profile this drops one popup
+  open from 6,009 serialised nodes to 4.
+
 ## [1.5.0] — 2026-08-05
 
 ### Fixed
@@ -97,6 +110,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   half-written folder behind.
 - Untitled groups are numbered; duplicate group names get a ` (2)` suffix.
 
+[1.5.1]: https://github.com/badjuice/TabsExplode/releases/tag/v1.5.1
 [1.5.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.5.0
 [1.4.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.4.0
 [1.3.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.3.0
