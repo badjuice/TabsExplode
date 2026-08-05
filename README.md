@@ -22,6 +22,20 @@ Two groups sharing a name get a ` (2)` suffix. Saving with more than one window
 in scope adds a `Window 1` / `Window 2` layer; with a single window that layer is
 skipped.
 
+## Why this exists
+
+I use several different browsers, and none of them solved this properly. The
+built-in "Bookmark all tabs" flattens everything into a single folder, and the
+extensions I could find either did the same thing or handled tab groups badly
+enough to be useless — no folder per group, or group membership dropped on the
+floor entirely. I wanted the structure I actually work in to survive the save.
+
+It was built with Claude because of time, not ability. I have a lot of ideas and
+very little room to implement them all — some are things I genuinely need, some
+just make my work easier or faster, and some are side projects I want to see
+exist. This was one of them, and the assistance is what moved it from an idea to
+something I actually use.
+
 ## Install
 
 **Chromium** (Chrome, Edge, Brave, Vivaldi, Opera, Helium, ungoogled-chromium)
@@ -75,14 +89,30 @@ disappear along with its last tab.
 
 ## Browser support
 
+Two floors, both set by when the tab-groups API became available: **Chromium 89**
+(March 2021) and **Firefox 139**. Both are old enough that any browser still
+receiving updates clears them comfortably — the numbers below matter only if you
+are pinned to something ancient.
+
 | Browser | Minimum | Notes |
 | --- | --- | --- |
-| Chrome & Chromium forks | 89 | Where `chrome.tabGroups` shipped |
+| Chrome | 89 | Where `chrome.tabGroups` shipped |
+| Edge | 89 | Tracks Chrome release for release |
+| Brave | 1.22 | The first Brave built on Chromium 89 |
+| Vivaldi | 3.7 | 3.6 was still on Chromium 88 |
+| Opera | ~75 | The Chromium 89 generation |
+| Helium | any release | Chromium-based and well past the floor |
+| ungoogled-chromium | 89 | Tracks Chromium directly |
 | Firefox | 139 | Where `browser.tabGroups` shipped |
-| Safari | — | Not supported; needs an Xcode conversion |
+| Safari | — | Not supported; would need an Xcode conversion |
 
-Tab-group support is feature-detected, so on a browser that lacks the API tabs
-still group correctly — only the folder names fall back to `Group 1`, `Group 2`.
+Other Chromium forks not listed here work too — the requirement is simply a
+Chromium 89 or newer base with the extension system intact.
+
+Tab-group support is feature-detected rather than assumed, so on a browser that
+lacks the API tabs still group correctly; only the folder names fall back to
+`Group 1`, `Group 2`. That also means the extension degrades instead of breaking
+on a fork that has stripped parts of the extension surface.
 
 ## Development
 
