@@ -31,7 +31,7 @@ export async function getRootFolders() {
     const children = await api.bookmarks.getChildren(TREE_ROOT);
     if (children.length) return children.filter((child) => !child.url);
   } catch {
-    // Unrecognised root id on some fork — fall back to the whole-tree read.
+    // Unrecognised root id on some fork. Fall back to the whole-tree read.
   }
   const [root] = await api.bookmarks.getTree();
   return (root.children ?? []).filter((child) => !child.url);

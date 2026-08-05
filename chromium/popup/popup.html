@@ -62,9 +62,25 @@
       </div>
     </section>
 
+    <section id="about" hidden>
+      <h1>About</h1>
+      <p class="credits">
+        Made by <a href="https://github.com/badjuice">BadJuice</a> with the
+        assistance of <a href="https://claude.ai">Claude</a>.
+      </p>
+      <h2>Changelog</h2>
+      <div id="releases" class="releases"></div>
+      <div class="actions">
+        <button id="about-back" class="ghost" type="button">Back</button>
+      </div>
+    </section>
+
     <footer>
       <span id="version"></span>
-      <a id="repo" href="#">See on GitHub</a>
+      <span class="footer-links">
+        <button id="about-open" class="link" type="button">About</button>
+        <a id="repo" href="#">See on GitHub</a>
+      </span>
     </footer>
 
     <script type="module" src="popup.js"></script>

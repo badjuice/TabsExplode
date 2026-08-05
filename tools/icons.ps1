@@ -2,7 +2,7 @@
 #   pwsh -File tools/icons.ps1
 #
 # The source art has transparent padding around the mark, so it is cropped to
-# its opaque bounds first — scaling the padded square directly would leave the
+# its opaque bounds first, because scaling the padded square directly leaves the
 # toolbar icon looking undersized.
 Add-Type -AssemblyName System.Drawing
 

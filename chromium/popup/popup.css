@@ -209,14 +209,85 @@ footer {
   font-size: 11px;
 }
 
-footer a {
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+footer a,
+footer .link {
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--muted);
+  font-size: 11px;
   text-decoration: none;
 }
 
-footer a:hover {
+footer a:hover,
+footer .link:hover {
   color: var(--accent);
   text-decoration: underline;
+}
+
+.credits {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.credits a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.credits a:hover {
+  text-decoration: underline;
+}
+
+/* The changelog grows with every release, so it scrolls inside the panel
+   rather than stretching the popup. */
+.releases {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.release + .release {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.release h3 {
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.release .date {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.release h4 {
+  margin: 9px 0 3px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.release ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.release li {
+  margin-bottom: 4px;
+  font-size: 12px;
 }
 
 [hidden] {

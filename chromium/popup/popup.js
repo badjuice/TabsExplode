@@ -1,4 +1,5 @@
 import { api, isGecko } from "../lib/api.js";
+import { RELEASES } from "../lib/changelog.js";
 import {
   DEFAULTS,
   getSettings,
@@ -75,8 +76,8 @@ async function refreshPreview() {
   destination.textContent = preview.destination;
 
   const notes = [];
-  // Said out loud rather than dropped silently — tabs vanishing from a save
-  // with no explanation is exactly what made this confusing in the first place.
+  // Said out loud rather than dropped silently. Tabs vanishing from a save with
+  // no explanation is what made this confusing in the first place.
   if (hidden) notes.push(`Only the active space is saved; ${plural(hidden, "tab")} elsewhere skipped.`);
   if (skipped) notes.push(`${plural(skipped, "tab")} without an address will be skipped.`);
   if (preview.closesTabs) notes.push("Saved tabs will be closed afterwards.");
@@ -95,8 +96,8 @@ function flash() {
   }, 1600);
 }
 
-// Settings feed the preview — scope changes the tab count, the destination
-// fields change the folder line — so every change re-reads it.
+// Settings feed the preview: scope changes the tab count, the destination
+// fields change the folder line. So every change re-reads it.
 function bind(element, patch) {
   element.addEventListener("change", async () => {
     await setSettings(patch());
@@ -146,6 +147,64 @@ nameInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !saveButton.disabled) save();
 });
 
+// Built from CHANGELOG.md at sync time, so the panel can't drift from it.
+function renderChangelog() {
+  const target = el("releases");
+  target.replaceChildren(
+    ...RELEASES.map((release) => {
+      const wrap = document.createElement("article");
+      wrap.className = "release";
+
+      const heading = document.createElement("h3");
+      heading.textContent = `v${release.version} `;
+      const date = document.createElement("span");
+      date.className = "date";
+      date.textContent = release.date;
+      heading.append(date);
+      wrap.append(heading);
+
+      for (const section of release.sections) {
+        const kind = document.createElement("h4");
+        kind.textContent = section.kind;
+        const list = document.createElement("ul");
+        list.append(
+          ...section.items.map((text) => {
+            const item = document.createElement("li");
+            item.textContent = text;
+            return item;
+          }),
+        );
+        wrap.append(kind, list);
+      }
+      return wrap;
+    }),
+  );
+}
+
+// About can be opened from either the confirm or the done view, so Back has to
+// return to whichever was showing rather than always assuming confirm.
+let viewBeforeAbout = "confirm";
+
+function showAbout(visible) {
+  if (visible) viewBeforeAbout = doneView.hidden ? "confirm" : "done";
+  el("about").hidden = !visible;
+  confirmView.hidden = visible || viewBeforeAbout !== "confirm";
+  doneView.hidden = visible || viewBeforeAbout !== "done";
+}
+
+el("about-open").addEventListener("click", () => showAbout(true));
+el("about-back").addEventListener("click", () => showAbout(false));
+
+// Anchors inside a popup don't reliably open a tab, so every external link is
+// routed through the tabs API instead.
+document.addEventListener("click", (event) => {
+  const link = event.target.closest('a[href^="http"]');
+  if (!link) return;
+  event.preventDefault();
+  api.tabs.create({ url: link.href });
+  window.close();
+});
+
 // Firefox's bookmark manager is a Library window with no navigable URL, so the
 // button can never work there and is dropped rather than left dead. On Chromium
 // it is still best effort: a fork may route the URL elsewhere, and failing to
@@ -169,18 +228,12 @@ if (isGecko) {
 const manifest = api.runtime.getManifest();
 el("version").textContent = `v${manifest.version}`;
 
-const repoLink = el("repo");
-repoLink.href = manifest.homepage_url;
-// A plain anchor in a popup won't reliably open a tab, so route through the
-// tabs API and dismiss the popup afterwards.
-repoLink.addEventListener("click", (event) => {
-  event.preventDefault();
-  api.tabs.create({ url: manifest.homepage_url });
-  window.close();
-});
+// Opening is handled by the delegated external-link listener below.
+el("repo").href = manifest.homepage_url;
 
 async function init() {
   nameInput.value = timestamp();
+  renderChangelog();
 
   const [activeTab] = await api.tabs.query({ active: true, currentWindow: true });
   windowId = activeTab.windowId;

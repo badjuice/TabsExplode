@@ -1,5 +1,5 @@
 // Guards the two builds against drift. Only manifest.json may differ between
-// chromium/ and firefox/ — everything else is mirrored by tools/sync.mjs, and a
+// chromium/ and firefox/. Everything else is mirrored by tools/sync.mjs, and a
 // fix landing in one build but not the other should fail here rather than ship.
 //   node test/parity.test.mjs
 import { readdir, readFile } from "node:fs/promises";
@@ -58,6 +58,17 @@ check("same permissions", manifests[0].permissions, manifests[1].permissions);
 check("chromium uses a service worker", typeof manifests[0].background.service_worker, "string");
 check("firefox uses background scripts", manifests[1].background.scripts, ["background.js"]);
 check("firefox declares a gecko id", typeof manifests[1].browser_specific_settings?.gecko?.id, "string");
+
+// The popup's About panel reads a generated module. If CHANGELOG.md moves on
+// without it being regenerated, the popup would quietly show stale history.
+const { build, TARGET } = await import(
+  pathToFileURL(join(ROOT, "tools", "changelog.mjs")).href
+);
+check(
+  "chromium/lib/changelog.js is up to date with CHANGELOG.md",
+  (await readFile(TARGET, "utf8")).replace(/\r\n/g, "\n"),
+  (await build()).replace(/\r\n/g, "\n"),
+);
 
 // lib/api.js is the whole Firefox port in three lines, and neither browser is
 // available here, so both branches are exercised against fakes.

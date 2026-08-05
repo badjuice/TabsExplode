@@ -65,7 +65,7 @@ const WIN_A = {
     { id: 15, index: 5, url: "https://c.example", title: "C", groupId: 8 },
     { id: 16, index: 6, url: "", title: "Broken", groupId: 8 },
     // Stands in for a Zen Space that isn't the active one: hidden, and in its
-    // own container. It must still be collected — missing these was the bug.
+    // own container. Missing these tabs entirely was the original bug.
     {
       id: 17,
       index: 7,
@@ -91,9 +91,9 @@ const GROUPS = {
 };
 
 // lib/api.js captures globalThis.chrome once, at module load. So the stub is
-// installed before the dynamic imports below and then mutated in place —
-// reassigning globalThis.chrome later would leave `api` pointing at the old
-// object and every call would land on a dead stub.
+// installed before the dynamic imports below and then mutated in place.
+// Reassigning globalThis.chrome later would leave `api` pointing at the old
+// object, and every call would land on a dead stub.
 const CHROME = {
   bookmarks,
   storage: { local: { async get() { return {}; }, async set() {} } },

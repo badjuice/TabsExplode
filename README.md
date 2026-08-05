@@ -2,8 +2,8 @@
   <img src="assets/logo-wordmark.png" alt="TabsExplode" width="380">
 </p>
 
-Bookmarks every open tab in one click and keeps your tab groups as folders —
-which the browser's own "Bookmark all tabs" throws away.
+Bookmarks every open tab in one click and keeps your tab groups as folders.
+The browser's own "Bookmark all tabs" throws that structure away.
 
 Available for Chromium browsers and Firefox.
 
@@ -13,7 +13,7 @@ Other bookmarks/
    └─ 2026-08-04 17.20/     ← one folder per save, name editable in the popup
       ├─ Research/          ← group folders first, by default
       │  ├─ arXiv paper
-      │  └─ Wikipedia — Kalman filter
+      │  └─ Wikipedia: Kalman filter
       ├─ Group 1/           ← an untitled group
       │  └─ ...
       ├─ Hacker News        ← then the ungrouped tabs, in tab-strip order
@@ -29,11 +29,11 @@ skipped.
 I use several different browsers, and none of them solved this properly. The
 built-in "Bookmark all tabs" flattens everything into a single folder, and the
 extensions I could find either did the same thing or handled tab groups badly
-enough to be useless — no folder per group, or group membership dropped on the
+enough to be useless: no folder per group, or group membership dropped on the
 floor entirely. I wanted the structure I actually work in to survive the save.
 
 It was built with Claude because of time, not ability. I have a lot of ideas and
-very little room to implement them all — some are things I genuinely need, some
+very little room to implement them all. Some are things I genuinely need, some
 just make my work easier or faster, and some are side projects I want to see
 exist. This was one of them, and the assistance is what moved it from an idea to
 something I actually use.
@@ -46,8 +46,8 @@ Neither build needs compiling. Get the code first:
 git clone https://github.com/badjuice/TabsExplode.git
 ```
 
-Or download the ZIP from the GitHub page and extract it somewhere permanent —
-both browsers load the extension from that folder and will break if you move or
+Or download the ZIP from the GitHub page and extract it somewhere permanent.
+Both browsers load the extension from that folder and will break if you move or
 delete it later.
 
 ### Chromium
@@ -63,7 +63,7 @@ The extension stays installed across restarts.
 
 ### Firefox
 
-Firefox 139 or newer, and forks on a 139+ base — Zen, LibreWolf, Waterfox,
+Firefox 139 or newer, and forks on a 139+ base: Zen, LibreWolf, Waterfox,
 Floorp.
 
 1. Open `about:debugging#/runtime/this-firefox`
@@ -82,7 +82,7 @@ through the same API is untested. If saved folders come out named `Group 1`,
 `Group 2` instead of your real group names, they don't.
 
 **Only the active Space is saved.** Zen exposes no Spaces API to extensions, so
-a saved folder has no way to record which Space a tab belonged to — pooling
+a saved folder has no way to record which Space a tab belonged to. Pooling
 every Space into one folder unlabelled would be worse than leaving them out. The
 popup says how many tabs it skipped, so this is never silent.
 
@@ -94,7 +94,7 @@ folder, saves on Enter, and carries all the settings underneath.
 | Setting | Default |
 | --- | --- |
 | Save tabs from | The current window |
-| Group folders | At the top — set to **In tab order** to keep each group where it sat in the strip |
+| Group folders | At the top. Set to **In tab order** to keep each group where it sat in the strip |
 | After saving | Leave tabs open |
 | Save into | Other bookmarks |
 | Parent folder | `TabsExplode Saved Tabs` |
@@ -117,14 +117,14 @@ disappear along with its last tab.
 - [ ] Keyboard shortcut
 - [ ] Skip duplicate and junk URLs
 - [ ] Popup remembers last-used choices
-- [ ] Restore — rebuild windows and tab groups from a saved folder
+- [ ] Restore: rebuild windows and tab groups from a saved folder
 - [ ] Published to the Chrome Web Store and AMO
 
 ## Browser support
 
 Two floors, both set by when the tab-groups API became available: **Chromium 89**
 (March 2021) and **Firefox 139**. Both are old enough that any browser still
-receiving updates clears them comfortably — the numbers below matter only if you
+receiving updates clears them comfortably. The numbers below matter only if you
 are pinned to something ancient.
 
 | Browser | Minimum | Notes |
@@ -137,10 +137,10 @@ are pinned to something ancient.
 | Helium | any release | Chromium-based and well past the floor |
 | ungoogled-chromium | 89 | Tracks Chromium directly |
 | Firefox | 139 | Where `browser.tabGroups` shipped |
-| Safari | — | Not supported; would need an Xcode conversion |
+| Safari | n/a | Not supported; would need an Xcode conversion |
 
-Other Chromium forks not listed here work too — the requirement is simply a
-Chromium 89 or newer base with the extension system intact.
+Other Chromium forks not listed here work too. The requirement is a Chromium 89
+or newer base with the extension system intact.
 
 Tab-group support is feature-detected rather than assumed, so on a browser that
 lacks the API tabs still group correctly; only the folder names fall back to

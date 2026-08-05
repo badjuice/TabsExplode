@@ -1,5 +1,5 @@
-// Firefox exposes a `chrome` shim, but it is callback-based — awaiting it
-// yields undefined instead of a result, which fails silently. `browser` is the
+// Firefox exposes a `chrome` shim, but it is callback-based, so awaiting it
+// yields undefined instead of a result and fails silently. `browser` is the
 // promise-based namespace there. In Chromium `browser` is undefined and
 // `chrome` is already promise-based under MV3, so this resolves correctly on
 // both without any browser sniffing.

@@ -23,13 +23,13 @@ export async function collect(scope, currentWindowId) {
 
     // tabs.query, not windows.get({ populate: true }). Zen hides every tab
     // belonging to an inactive Space, and the populated window object leaves
-    // hidden tabs out — so a save silently captured only the active Space.
+    // hidden tabs out, so a save silently captured only the active Space.
     // tabs.query returns them unless `hidden` is passed as a filter.
     const tabs = (await api.tabs.query({ windowId })).sort((a, b) => a.index - b.index);
     for (const tab of tabs) {
       // A hidden tab belongs to a Zen Space that isn't the active one. Spaces
       // are not exposed to extensions, so a saved folder could not record which
-      // Space a tab came from — pooling them all together unlabelled would be
+      // Space a tab came from. Pooling them all together unlabelled would be
       // worse than saving the active Space alone. They are counted so the popup
       // can say they were left out rather than dropping them silently.
       if (tab.hidden) {
