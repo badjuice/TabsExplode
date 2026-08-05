@@ -20,6 +20,35 @@
   --grad: linear-gradient(115deg, var(--brand-from), var(--brand-to));
 }
 
+/* background-image is not an animatable property, so a gradient cannot fade
+   into another one directly. Registered custom properties can animate, so the
+   gradients are built from these and the alpha is what actually transitions.
+   Without the @property registration these are untyped and would snap. */
+@property --fill {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --ring {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+:root {
+  --brand-from-rgb: 247 148 30;
+  --brand-to-rgb: 224 45 24;
+  --ease: 140ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-from-rgb: 251 164 58;
+    --brand-to-rgb: 240 74 46;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #1f2023;
@@ -152,42 +181,49 @@ input {
   font: inherit;
 }
 
-/* The native arrow disappears the moment a background-image is set, so it is
-   drawn here and carried through every state. */
+/* A border cannot take a gradient, so the layers do the work: the field fill
+   clipped to the padding box, then two rings clipped to the border box with the
+   border itself transparent. The brand ring sits over the grey one and fades in
+   as --ring goes to 1. background-color has to go, or it would paint over the
+   border area and hide both rings. */
+input {
+  border-color: transparent;
+  background-color: transparent;
+  background-image:
+    linear-gradient(var(--field), var(--field)),
+    linear-gradient(115deg, rgb(var(--brand-from-rgb) / var(--ring)), rgb(var(--brand-to-rgb) / var(--ring))),
+    linear-gradient(var(--border), var(--border));
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+  transition: --ring var(--ease);
+}
+
+/* The native arrow disappears the moment a background-image is set on a select,
+   so the chevron is supplied here and carried as the topmost layer. */
 select {
   appearance: none;
   padding-right: 26px;
-  background-image: var(--chevron);
-  background-repeat: no-repeat;
-  background-position: right 9px center;
-  background-size: 10px 6px;
-}
-
-/* A border cannot take a gradient, so two layers do the work: the field fill
-   clipped to the padding box, the gradient clipped to the border box, with the
-   border itself transparent so the gradient shows through it. background-color
-   has to go, or it would paint over the border area and hide the gradient. */
-input:hover,
-input:focus-visible {
   border-color: transparent;
-  outline: none;
   background-color: transparent;
-  background-image: linear-gradient(var(--field), var(--field)), var(--grad);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+  background-image:
+    var(--chevron),
+    linear-gradient(var(--field), var(--field)),
+    linear-gradient(115deg, rgb(var(--brand-from-rgb) / var(--ring)), rgb(var(--brand-to-rgb) / var(--ring))),
+    linear-gradient(var(--border), var(--border));
+  background-repeat: no-repeat, repeat, repeat, repeat;
+  background-position: right 9px center, 0 0, 0 0, 0 0;
+  background-size: 10px 6px, auto, auto, auto;
+  background-origin: padding-box, border-box, border-box, border-box;
+  background-clip: padding-box, padding-box, border-box, border-box;
+  transition: --ring var(--ease);
 }
 
 select:hover,
-select:focus-visible {
-  border-color: transparent;
+select:focus-visible,
+input:hover,
+input:focus-visible {
+  --ring: 1;
   outline: none;
-  background-color: transparent;
-  background-image: var(--chevron), linear-gradient(var(--field), var(--field)), var(--grad);
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: right 9px center, 0 0, 0 0;
-  background-size: 10px 6px, auto, auto;
-  background-origin: padding-box, border-box, border-box;
-  background-clip: padding-box, padding-box, border-box;
 }
 
 .destination {
@@ -229,26 +265,31 @@ button {
   background-color: transparent;
   background-image: var(--grad);
   color: var(--accent-fg);
+  transition: filter var(--ease);
 }
 
 .primary:hover:not(:disabled) {
   filter: brightness(1.07);
 }
 
-/* Gradient outline at rest, gradient fill on hover. Same two-layer trick as the
-   fields: swapping the inner layer from the page background to the gradient is
-   what turns the outline into a fill. */
+/* Gradient outline at rest, gradient fill on hover. The interior brand layer
+   sits over the page-coloured one and fades in as --fill goes to 1, which is
+   what makes the swap animate rather than snap. */
 .ghost {
   border-color: transparent;
   color: inherit;
   background-color: transparent;
-  background-image: linear-gradient(var(--bg), var(--bg)), var(--grad);
+  background-image:
+    linear-gradient(115deg, rgb(var(--brand-from-rgb) / var(--fill)), rgb(var(--brand-to-rgb) / var(--fill))),
+    linear-gradient(var(--bg), var(--bg)),
+    var(--grad);
   background-origin: border-box;
-  background-clip: padding-box, border-box;
+  background-clip: padding-box, padding-box, border-box;
+  transition: --fill var(--ease), color var(--ease);
 }
 
 .ghost:hover:not(:disabled) {
-  background-image: var(--grad), var(--grad);
+  --fill: 1;
   color: var(--accent-fg);
 }
 
@@ -288,13 +329,17 @@ footer {
   font-weight: 500;
   line-height: 1.5;
   background-color: transparent;
-  background-image: linear-gradient(var(--bg), var(--bg)), var(--grad);
+  background-image:
+    linear-gradient(115deg, rgb(var(--brand-from-rgb) / var(--fill)), rgb(var(--brand-to-rgb) / var(--fill))),
+    linear-gradient(var(--bg), var(--bg)),
+    var(--grad);
   background-origin: border-box;
-  background-clip: padding-box, border-box;
+  background-clip: padding-box, padding-box, border-box;
+  transition: --fill var(--ease), color var(--ease);
 }
 
 .toggle:hover {
-  background-image: var(--grad), var(--grad);
+  --fill: 1;
   color: var(--accent-fg);
 }
 

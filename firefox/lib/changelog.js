@@ -1,6 +1,19 @@
 // Generated from CHANGELOG.md by tools/changelog.mjs. Do not edit by hand.
 export const RELEASES = [
   {
+    "version": "1.10.0",
+    "date": "2026-08-05",
+    "sections": [
+      {
+        "kind": "Added",
+        "items": [
+          "Hover and focus now fade over 140ms instead of snapping. background-image is not animatable, so a gradient cannot transition into another one directly. The gradients are built from registered custom properties and the alpha is what animates, which the browser can interpolate.",
+          "README section on the tech stack and why there is no framework, no build step and no dependencies."
+        ]
+      }
+    ]
+  },
+  {
     "version": "1.9.0",
     "date": "2026-08-05",
     "sections": [

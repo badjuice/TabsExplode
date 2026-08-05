@@ -5,6 +5,17 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-08-05
+
+### Added
+
+- Hover and focus now fade over 140ms instead of snapping. background-image is
+  not animatable, so a gradient cannot transition into another one directly.
+  The gradients are built from registered custom properties and the alpha is
+  what animates, which the browser can interpolate.
+- README section on the tech stack and why there is no framework, no build step
+  and no dependencies.
+
 ## [1.9.0] - 2026-08-05
 
 ### Changed
@@ -173,6 +184,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   half-written folder behind.
 - Untitled groups are numbered; duplicate group names get a ` (2)` suffix.
 
+[1.10.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.10.0
 [1.9.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.9.0
 [1.8.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.8.0
 [1.7.1]: https://github.com/badjuice/TabsExplode/releases/tag/v1.7.1

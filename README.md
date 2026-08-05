@@ -38,6 +38,32 @@ just make my work easier or faster, and some are side projects I want to see
 exist. This was one of them, and the assistance is what moved it from an idea to
 something I actually use.
 
+## Tech stack
+
+Plain JavaScript, ES modules, and CSS. No framework, no bundler, no build step,
+and no dependencies. There is no `package.json` in this repo.
+
+Partly that is a size argument. The shipped extension is about 950 lines across
+eight files, and roughly half of that is the popup's stylesheet. A framework
+would have weighed more than the thing it was building.
+
+Skipping the build step matters more. The folder you point "Load unpacked" at
+is the source itself, so what runs in the browser is what sits in the repo, with
+no bundle or source map in between. When something breaks, the file in the
+debugger is the file you edit.
+
+Zero dependencies is a deliberate choice for this kind of extension rather than
+a general principle. TabsExplode can read every tab you have open and write to
+your bookmarks. That is a lot of trust to hand to a transitive dependency you
+have never read.
+
+Node is used, but never inside the extension. The two test files run on the
+built-in runtime with no test runner, `tools/sync.mjs` mirrors the Chromium
+build into the Firefox one, and `tools/changelog.mjs` turns `CHANGELOG.md` into
+the data the About panel renders. The icons are resized by a PowerShell script
+through System.Drawing, which was already on the machine and was enough for
+cropping and scaling one PNG.
+
 ## Install
 
 Neither build needs compiling. Get the code first:
