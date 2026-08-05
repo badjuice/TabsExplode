@@ -1,4 +1,6 @@
-# TabsExplode
+<p align="center">
+  <img src="assets/logo-wordmark.png" alt="TabsExplode" width="380">
+</p>
 
 Bookmarks every open tab in one click and keeps your tab groups as folders —
 which the browser's own "Bookmark all tabs" throws away.

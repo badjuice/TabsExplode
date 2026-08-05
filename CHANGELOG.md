@@ -5,6 +5,18 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-08-05
+
+### Added
+
+- Real logo, replacing the placeholder icon. Source artwork lives in `assets/`,
+  outside both builds so it is not shipped inside the extension package.
+- The mark now appears in the popup header, and the wordmark heads the README.
+- `tools/icons.ps1`, which regenerates the four icon sizes from
+  `assets/logo.png`. It crops to the artwork's opaque bounds first — scaling the
+  padded square directly left the toolbar icon looking undersized — and firms up
+  alpha at 16 and 32 px, where the shard trail otherwise faded to pale noise.
+
 ## [1.3.0] — 2026-08-04
 
 ### Added
@@ -71,6 +83,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   half-written folder behind.
 - Untitled groups are numbered; duplicate group names get a ` (2)` suffix.
 
+[1.4.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.4.0
 [1.3.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.3.0
 [1.2.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.2.0
 [1.1.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.1.0
