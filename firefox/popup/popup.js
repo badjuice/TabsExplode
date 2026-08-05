@@ -181,19 +181,22 @@ function renderChangelog() {
   );
 }
 
-// About can be opened from either the confirm or the done view, so Back has to
-// return to whichever was showing rather than always assuming confirm.
+// One button toggles between About and whatever was showing before it, which
+// is either confirm or done depending on whether a save has run.
+const viewToggle = el("view-toggle");
+let aboutOpen = false;
 let viewBeforeAbout = "confirm";
 
 function showAbout(visible) {
   if (visible) viewBeforeAbout = doneView.hidden ? "confirm" : "done";
+  aboutOpen = visible;
   el("about").hidden = !visible;
   confirmView.hidden = visible || viewBeforeAbout !== "confirm";
   doneView.hidden = visible || viewBeforeAbout !== "done";
+  viewToggle.textContent = visible ? "Back" : "About";
 }
 
-el("about-open").addEventListener("click", () => showAbout(true));
-el("about-back").addEventListener("click", () => showAbout(false));
+viewToggle.addEventListener("click", () => showAbout(!aboutOpen));
 
 // Anchors inside a popup don't reliably open a tab, so every external link is
 // routed through the tabs API instead.

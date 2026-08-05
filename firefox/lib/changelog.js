@@ -1,6 +1,20 @@
 // Generated from CHANGELOG.md by tools/changelog.mjs. Do not edit by hand.
 export const RELEASES = [
   {
+    "version": "1.8.0",
+    "date": "2026-08-05",
+    "sections": [
+      {
+        "kind": "Changed",
+        "items": [
+          "The popup now uses the logo's colours. Headings and the brand name carry the amber-to-red gradient, and the Save button is filled with it. The accent was still the blue placeholder from before the logo existed, so nothing on screen matched the icon.",
+          "Every button has a visible border or fill, so none of them read as plain text.",
+          "About and Back collapsed into one toggle button in the bottom-right of the footer, bordered and aligned against the version on the opposite edge."
+        ]
+      }
+    ]
+  },
+  {
     "version": "1.7.1",
     "date": "2026-08-05",
     "sections": [
