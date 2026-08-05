@@ -173,19 +173,18 @@ function check(name, actual, expected) {
       "      B",
       "    Group 1/",
       "      C",
-      "    Research (2)/",
-      "      D",
       "    Pinned",
       "    HN",
       "    Loose",
     ].join("\n"),
   );
   check("single window counts", plan.counts, {
-    windows: 1, tabs: 7, groups: 3, skipped: 1, hidden: 1, stores: 1,
+    windows: 1, tabs: 6, groups: 2, skipped: 1, hidden: 1,
   });
-  check("hidden Space tab was collected", tree.includes("D"), true);
-  check("written count", result.written, 7);
-  check("tabIds exclude skipped", plan.windows[0].tabIds, [10, 11, 12, 13, 14, 15, 17]);
+  check("tab in an inactive Space is left out", tree.includes("D"), false);
+  check("its now-empty group folder is not created", tree.includes("Research (2)"), false);
+  check("written count", result.written, 6);
+  check("tabIds exclude skipped and hidden", plan.windows[0].tabIds, [10, 11, 12, 13, 14, 15]);
 }
 
 // 1b. inline placement leaves each group where its tabs sat in the strip.
@@ -205,8 +204,6 @@ function check(name, actual, expected) {
       "    Loose",
       "    Group 1/",
       "      C",
-      "    Research (2)/",
-      "      D",
     ].join("\n"),
   );
 }
@@ -226,8 +223,6 @@ function check(name, actual, expected) {
       "        B",
       "      Group 1/",
       "        C",
-      "      Research (2)/",
-      "        D",
       "      Pinned",
       "      HN",
       "      Loose",
@@ -236,7 +231,7 @@ function check(name, actual, expected) {
     ].join("\n"),
   );
   check("all windows counts", plan.counts, {
-    windows: 2, tabs: 8, groups: 3, skipped: 1, hidden: 1, stores: 1,
+    windows: 2, tabs: 7, groups: 2, skipped: 1, hidden: 1,
   });
 }
 
@@ -254,8 +249,6 @@ function check(name, actual, expected) {
       "      B",
       "    Group 2/",
       "      C",
-      "    Group 3/",
-      "      D",
       "    Pinned",
       "    HN",
       "    Loose",

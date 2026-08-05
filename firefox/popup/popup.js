@@ -67,18 +67,17 @@ async function refreshPreview() {
     return;
   }
 
-  const { tabs, groups, windows, skipped, hidden, stores } = preview.counts;
+  const { tabs, groups, windows, skipped, hidden } = preview.counts;
   const parts = [`Save ${plural(tabs, "tab")}`];
   if (groups) parts.push(`in ${plural(groups, "group")}`);
-  // Spaces aren't exposed to extensions; container-bound Spaces show up as
-  // separate cookie stores, which is the closest available signal.
-  if (stores > 1) parts.push(`in ${plural(stores, "space")}`);
   if (windows > 1) parts.push(`across ${plural(windows, "window")}`);
   summary.textContent = parts.join(" ");
   destination.textContent = preview.destination;
 
   const notes = [];
-  if (hidden) notes.push(`Includes ${hidden} tab${hidden === 1 ? "" : "s"} from other spaces.`);
+  // Said out loud rather than dropped silently — tabs vanishing from a save
+  // with no explanation is exactly what made this confusing in the first place.
+  if (hidden) notes.push(`Only the active space is saved; ${plural(hidden, "tab")} elsewhere skipped.`);
   if (skipped) notes.push(`${plural(skipped, "tab")} without an address will be skipped.`);
   if (preview.closesTabs) notes.push("Saved tabs will be closed afterwards.");
   note.textContent = notes.join(" ");

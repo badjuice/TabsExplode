@@ -5,6 +5,18 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] — 2026-08-05
+
+### Changed
+
+- Saves now cover the active Zen Space only, and say so. Zen exposes no Spaces
+  API, so a saved folder cannot record which Space a tab came from; pooling
+  every Space into one unlabelled folder was worse than leaving them out. The
+  popup reports how many tabs were skipped, so nothing disappears silently.
+- Dropped the space count from the summary line. It was inferred from cookie
+  stores, which only detects container-bound Spaces and would have been wrong
+  for anyone whose Spaces have no container assigned.
+
 ## [1.5.1] — 2026-08-05
 
 ### Fixed
@@ -110,6 +122,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   half-written folder behind.
 - Untitled groups are numbered; duplicate group names get a ` (2)` suffix.
 
+[1.6.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.6.0
 [1.5.1]: https://github.com/badjuice/TabsExplode/releases/tag/v1.5.1
 [1.5.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.5.0
 [1.4.0]: https://github.com/badjuice/TabsExplode/releases/tag/v1.4.0

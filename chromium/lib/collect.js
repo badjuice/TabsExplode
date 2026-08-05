@@ -12,7 +12,6 @@ export async function collect(scope, currentWindowId) {
       : [currentWindowId];
 
   const counts = { windows: 0, tabs: 0, groups: 0, skipped: 0, hidden: 0 };
-  const stores = new Set();
   const collected = [];
 
   for (const windowId of windowIds) {
@@ -28,6 +27,15 @@ export async function collect(scope, currentWindowId) {
     // tabs.query returns them unless `hidden` is passed as a filter.
     const tabs = (await api.tabs.query({ windowId })).sort((a, b) => a.index - b.index);
     for (const tab of tabs) {
+      // A hidden tab belongs to a Zen Space that isn't the active one. Spaces
+      // are not exposed to extensions, so a saved folder could not record which
+      // Space a tab came from — pooling them all together unlabelled would be
+      // worse than saving the active Space alone. They are counted so the popup
+      // can say they were left out rather than dropping them silently.
+      if (tab.hidden) {
+        counts.hidden++;
+        continue;
+      }
       if (!tab.url) {
         counts.skipped++;
         continue;
@@ -35,9 +43,6 @@ export async function collect(scope, currentWindowId) {
       const entry = { title: tab.title || tab.url, url: tab.url };
       tabIds.push(tab.id);
       counts.tabs++;
-      // A hidden tab belongs to a Space that isn't the active one.
-      if (tab.hidden) counts.hidden++;
-      if (tab.cookieStoreId) stores.add(tab.cookieStoreId);
 
       const groupId = tab.groupId ?? UNGROUPED;
       if (groupId === UNGROUPED) {
@@ -69,10 +74,6 @@ export async function collect(scope, currentWindowId) {
     win.label = `Window ${i + 1}`;
   });
 
-  // Zen exposes no Spaces API. Container-bound Spaces show up as distinct
-  // cookie stores, which is the only signal available — and it is a signal for
-  // containers, not Spaces as such, so the popup treats it as a lower bound.
-  counts.stores = stores.size;
   return { windows: collected, counts };
 }
 

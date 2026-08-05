@@ -74,10 +74,17 @@ Temporary add-ons are removed when the browser restarts, so this has to be
 repeated each session. A signed build for permanent installation is on the
 roadmap.
 
-On Zen specifically: its nested **tab folders** are Zen's own feature, separate
-from Firefox's native tab groups. Native groups are read normally; whether Zen's
-tab folders surface through the same API is untested. If saved folders come out
-named `Group 1`, `Group 2` instead of your real group names, they don't.
+On Zen specifically, two things to know.
+
+Its nested **tab folders** are Zen's own feature, separate from Firefox's native
+tab groups. Native groups are read normally; whether Zen's tab folders surface
+through the same API is untested. If saved folders come out named `Group 1`,
+`Group 2` instead of your real group names, they don't.
+
+**Only the active Space is saved.** Zen exposes no Spaces API to extensions, so
+a saved folder has no way to record which Space a tab belonged to — pooling
+every Space into one folder unlabelled would be worse than leaving them out. The
+popup says how many tabs it skipped, so this is never silent.
 
 ## Use
 
