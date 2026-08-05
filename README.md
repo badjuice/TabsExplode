@@ -38,20 +38,44 @@ something I actually use.
 
 ## Install
 
-**Chromium** (Chrome, Edge, Brave, Vivaldi, Opera, Helium, ungoogled-chromium)
+Neither build needs compiling. Get the code first:
+
+```bash
+git clone https://github.com/badjuice/TabsExplode.git
+```
+
+Or download the ZIP from the GitHub page and extract it somewhere permanent —
+both browsers load the extension from that folder and will break if you move or
+delete it later.
+
+### Chromium
+
+Chrome, Edge, Brave, Vivaldi, Opera, Helium, ungoogled-chromium, Arc.
 
 1. Open `chrome://extensions`
 2. Turn on **Developer mode**
-3. **Load unpacked** → select the `chromium/` folder
+3. **Load unpacked** → select the `chromium/` folder (the one containing
+   `manifest.json`, not a folder inside it)
 
-**Firefox** (139 or newer)
+The extension stays installed across restarts.
+
+### Firefox
+
+Firefox 139 or newer, and forks on a 139+ base — Zen, LibreWolf, Waterfox,
+Floorp.
 
 1. Open `about:debugging#/runtime/this-firefox`
 2. **Load Temporary Add-on…**
 3. Select `firefox/manifest.json`
 
-Temporary add-ons are removed when Firefox restarts. A signed build for
-permanent installation is on the roadmap.
+Temporary add-ons are removed when the browser restarts, so this has to be
+repeated each session. A signed build for permanent installation is on the
+roadmap.
+
+On Zen specifically: its nested **tab folders** are Zen's own feature, separate
+from Firefox's native tab groups. Native groups are read normally; whether Zen's
+tab folders surface through the same API is untested. If saved folders come out
+named `Group 1`, `Group 2` instead of your real group names, they don't.
 
 ## Use
 
